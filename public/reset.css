@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+*,
+*::before,
+*::after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+}
+
+ul,
+li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: none;
+}
+
+a:is(:hover, :active, :focus, :focus-visible, :visited) {
+    color: none;
+}
+
+a:-webkit-any(:hover, :active, :focus, :focus-visible, :visited) {
+    color: none;
+}
