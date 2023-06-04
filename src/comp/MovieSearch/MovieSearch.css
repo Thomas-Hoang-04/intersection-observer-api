@@ -1,0 +1,88 @@
+.custom-loader {
+    width: 45px;
+    height: 40px;
+    --c: linear-gradient(#319795 calc(50% - 10px), #0000 0 calc(50% + 10px), #319795 0);
+    background:
+        var(--c) 0% 100%,
+        var(--c) 50% 100%,
+        var(--c) 100% 100%;
+    background-size: 9px calc(200% + 20px);
+    background-repeat: no-repeat;
+    animation: b4 1s infinite linear;
+}
+
+.toggle-switch {
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    --light: #CBD5E0;
+    --dark: #1D4044;
+    --w: 65px;
+    --h: calc(var(--w) / 2);
+}
+
+.switch-label {
+    position: absolute;
+    width: 100%;
+    height: var(--h);
+    background-color: var(--dark);
+    border-radius: 100vw;
+    cursor: pointer;
+    border: 3px solid;
+}
+
+.checkbox {
+    position: absolute;
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 100vw;
+    transition: 0.3s;
+    border: none;
+}
+
+.checkbox:checked~.slider {
+    background-color: var(--light);
+}
+
+
+.slider::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 5.5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-shadow: inset 6px -4px 0px 0px var(--light);
+    transform: rotateZ(20deg);
+    transition: 0.3s;
+}
+
+.checkbox:checked~.slider::before {
+    transform: translateX(30px);
+    background-color: #234E52;
+    box-shadow: none;
+}
+
+@keyframes b4 {
+    33% {
+        background-position: 0% 50%, 50% 100%, 100% 100%
+    }
+
+    50% {
+        background-position: 0% 0%, 50% 50%, 100% 100%
+    }
+
+    66% {
+        background-position: 0% 0%, 50% 0%, 100% 50%
+    }
+
+    100% {
+        background-position: 0% 0%, 50% 0%, 100% 0%
+    }
+}
