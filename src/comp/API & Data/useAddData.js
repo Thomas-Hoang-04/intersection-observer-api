@@ -60,7 +60,21 @@ export default function useAddData(id, type) {
 
               const receivedMovieData = {
                 studio:
-                  res.data.production_companies.length === 1 ? null : undefined,
+                  res.data.production_companies.length > 0
+                    ? res.data.production_companies
+                        .filter((studio, index) => index < 5)
+                        .map(studio => studio.name)
+                        .reduce(
+                          (total, current, currentIndex, arr) =>
+                            total +
+                            `${
+                              currentIndex === arr.length - 1
+                                ? `${current}`
+                                : `${current}, `
+                            }`,
+                          ""
+                        )
+                    : undefined,
 
                 directors:
                   res_cast.data.crew.length > 0
