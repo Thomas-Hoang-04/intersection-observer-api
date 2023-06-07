@@ -1,14 +1,7 @@
-import { memo, useDeferredValue, useEffect } from "react";
+import { memo, useDeferredValue } from "react";
 import { v4 as uuidv4 } from "uuid";
 import useAddData from "../API & Data/useAddData";
-import {
-  Flex,
-  Text,
-  Divider,
-  Badge,
-  Box,
-  useColorMode,
-} from "@chakra-ui/react";
+import { Flex, Text, Divider, Badge, useColorMode } from "@chakra-ui/react";
 
 export const ExtraTVData = memo(({ id }) => {
   const { colorMode } = useColorMode();
@@ -28,7 +21,7 @@ export const ExtraTVData = memo(({ id }) => {
     <>
       {data.directors !== undefined && (
         <Flex fontSize={"xl"} gap="0.15rem">
-          <Box fontWeight={500} fontStyle={"italic"}>
+          <Text fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -36,12 +29,12 @@ export const ExtraTVData = memo(({ id }) => {
               Directors:
             </Text>{" "}
             {data.directors}
-          </Box>
+          </Text>
         </Flex>
       )}
       {data.casts !== undefined && (
         <Flex fontSize={"xl"} gap="0.15rem" mb=".25rem" wrap={"wrap"}>
-          <Box fontWeight={500} fontStyle={"italic"}>
+          <Text fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -49,7 +42,7 @@ export const ExtraTVData = memo(({ id }) => {
               Casts:
             </Text>{" "}
             {data.casts}
-          </Box>
+          </Text>
         </Flex>
       )}
       <Flex
@@ -61,7 +54,7 @@ export const ExtraTVData = memo(({ id }) => {
           <>
             {data.seasons !== undefined && (
               <>
-                <Box fontWeight={500} fontStyle={"italic"}>
+                <Text fontWeight={500} fontStyle={"italic"}>
                   <Text
                     fontWeight={700}
                     display={"inline-block"}
@@ -72,7 +65,7 @@ export const ExtraTVData = memo(({ id }) => {
                     ? data.episodes.season <= data.seasons &&
                       `Season ${data.episodes.season}`
                     : `Season ${data.seasons}`}
-                </Box>
+                </Text>
               </>
             )}
             {data.episodes !== undefined && (
@@ -89,7 +82,7 @@ export const ExtraTVData = memo(({ id }) => {
                     mr=".5rem"
                   />
                 </Flex>
-                <Box fontWeight={500} fontStyle={"italic"}>
+                <Text fontWeight={500} fontStyle={"italic"}>
                   <Text
                     fontWeight={700}
                     display={"inline-block"}
@@ -97,7 +90,7 @@ export const ExtraTVData = memo(({ id }) => {
                     Last Episodes:
                   </Text>{" "}
                   Episode {data.episodes.episode}
-                </Box>
+                </Text>
                 <Badge
                   fontSize={"md"}
                   variant={"solid"}
@@ -235,10 +228,6 @@ export const ExtraMovieData = memo(({ id }) => {
   // Additional data fetching
   const data = useDeferredValue(useAddData(id, "movie"));
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const directors =
     data.directors !== undefined && data.directors.length > 0
       ? data.directors
@@ -259,22 +248,9 @@ export const ExtraMovieData = memo(({ id }) => {
 
   return (
     <>
-      {data.studio !== undefined && (
-        <Flex fontSize={"xl"} gap="0.15rem" wrap="wrap">
-          <Box fontWeight={500} fontStyle={"italic"}>
-            <Text
-              fontWeight={700}
-              display={"inline-block"}
-              fontStyle={"initial" || "-moz-initial"}>
-              Created By:
-            </Text>{" "}
-            {data.studio}
-          </Box>
-        </Flex>
-      )}
       {directors !== undefined && (
         <Flex fontSize={"xl"} gap="0.15rem">
-          <Box fontWeight={500} fontStyle={"italic"}>
+          <Text fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -282,12 +258,12 @@ export const ExtraMovieData = memo(({ id }) => {
               Directors:
             </Text>{" "}
             {data.directors}
-          </Box>
+          </Text>
         </Flex>
       )}
       {data.casts !== undefined && (
         <Flex fontSize={"xl"} gap="0.15rem" mb=".25rem" wrap={"wrap"}>
-          <Box fontWeight={500} fontStyle={"italic"}>
+          <Text fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -295,20 +271,7 @@ export const ExtraMovieData = memo(({ id }) => {
               Casts:
             </Text>{" "}
             {data.casts}
-          </Box>
-        </Flex>
-      )}
-      {data.runtime !== undefined && (
-        <Flex fontSize={"xl"} gap="0.15rem">
-          <Box fontWeight={500} fontStyle={"italic"}>
-            <Text
-              fontWeight={700}
-              display={"inline-block"}
-              fontStyle={"initial" || "-moz-initial"}>
-              Duration:
-            </Text>{" "}
-            {data.runtime}
-          </Box>
+          </Text>
         </Flex>
       )}
       <Flex mt=".4rem" gap="1rem" wrap="wrap">
