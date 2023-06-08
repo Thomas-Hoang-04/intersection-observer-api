@@ -74,8 +74,39 @@ export default function useResult(type, query, page, year = undefined) {
                     return {
                       id: result.id,
                       name: result.name,
+                      gender: result.gender === 1 ? "Female" : "Male",
                       picture: result.profile_path,
-                      works: result.known_for,
+                      works:
+                        result.known_for.length > 0
+                          ? result.known_for
+                              .map(known_works => {
+                                let title =
+                                  known_works.media_type === "movie"
+                                    ? known_works.title
+                                    : known_works.media_type === "tv"
+                                    ? known_works.name
+                                    : undefined;
+                                let year =
+                                  known_works.media_type === "movie"
+                                    ? known_works.release_date.slice(0, 4)
+                                    : known_works.media_type === "tv"
+                                    ? known_works.first_air_date.slice(0, 4)
+                                    : undefined;
+                                return `${title}${
+                                  year !== undefined ? ` (${year})` : ""
+                                }`;
+                              })
+                              .reduce(
+                                (total, current, currentIndex, arr) =>
+                                  total +
+                                  `${
+                                    currentIndex === arr.length - 1
+                                      ? `${current}`
+                                      : `${current}, `
+                                  }`,
+                                ""
+                              )
+                          : undefined,
                     };
                   default:
                     break;

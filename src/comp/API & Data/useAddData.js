@@ -2,6 +2,40 @@ import { startTransition, useLayoutEffect, useState } from "react";
 import axios from "axios";
 import { countries } from "./countries";
 
+const monthList = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const getDateSuffix = date => {
+  switch (date) {
+    case date % 10 === 1:
+      return "st";
+    case date % 10 === 2:
+      return "nd";
+    case date % 10 === 3:
+      return "rd";
+    default:
+      return "th";
+  }
+};
+
+const convertDate = date => {
+  return `${monthList[date.getMonth()]} ${date.getDate()}${getDateSuffix(
+    date.getDate()
+  )}, ${date.getFullYear()}}`;
+};
+
 export default function useAddData(id, type) {
   const [data, setData] = useState({});
 
@@ -43,24 +77,52 @@ export default function useAddData(id, type) {
                 res.data.production_countries.length > 0
                   ? [
                       ...new Set([
-                        ...res.data.production_countries.map(
-                          country => country.iso_3166_1
+                        ...res.data.production_countries.map(country =>
+                          country.iso_3166_1 === "SU"
+                            ? "RU"
+                            : country.iso_3166_1
                         ),
                       ]),
                     ]
                   : res.data.production_companies.length > 0
                   ? [
                       ...new Set([
-                        ...res.data.production_companies.map(
-                          company => company.origin_country
-                        ),
+                        ...res.data.production_companies
+                          .filter(
+                            company =>
+                              company.origin_country.length > 0 &&
+                              company.origin_country !== null
+                          )
+                          .map(company =>
+                            company.origin_country === "SU"
+                              ? "RU"
+                              : company.origin_country
+                          ),
                       ]),
                     ]
                   : undefined;
 
               const receivedMovieData = {
-                studio:
-                  res.data.production_companies.length === 1 ? null : undefined,
+                studios:
+                  res.data.production_companies.length > 0
+                    ? res.data.production_companies
+                        .filter(
+                          (studio, index) =>
+                            studio.name.length > 0 &&
+                            (studio.name !== null) & (index < 6)
+                        )
+                        .map(studio => studio.name)
+                        .reduce(
+                          (total, current, currentIndex, arr) =>
+                            total +
+                            `${
+                              currentIndex === arr.length - 1
+                                ? `${current}`
+                                : `${current}, `
+                            }`,
+                          ""
+                        )
+                    : undefined,
 
                 directors:
                   res_cast.data.crew.length > 0
@@ -112,12 +174,21 @@ export default function useAddData(id, type) {
                 genres: res.data.genres.map(g => g.name),
 
                 fullOrigin:
-                  movieOrigin !== undefined
-                    ? movieOrigin.map(
-                        origin =>
-                          countries.filter(
-                            country => country.code === origin
-                          )[0].name
+                  movieOrigin !== undefined && movieOrigin.length > 0
+                    ? movieOrigin.map(origin =>
+                        countries
+                          .filter(country => country.code === origin)
+                          .map(country => country.name)
+                          .reduce(
+                            (total, current, currentIndex, arr) =>
+                              total +
+                              `${
+                                currentIndex === arr.length - 1
+                                  ? `${current}`
+                                  : `${current}, `
+                              }`,
+                            ""
+                          )
                       )
                     : undefined,
 
@@ -128,16 +199,35 @@ export default function useAddData(id, type) {
               };
               startTransition(() => setData(receivedMovieData));
               break;
+
             case "tv":
               const tvOrigin =
                 res.data.origin_country.length > 0
                   ? res.data.origin_country
-                  : res.data.production_companies.length !== 0
-                  ? res.data.production_companies[0].origin_country
-                  : res.data.networks.length !== 0
-                  ? res.data.networks[0].origin_country.length > 0
-                    ? res.data.networks[0].origin_country
-                    : undefined
+                  : res.data.production_companies.length > 0
+                  ? res.data.production_companies
+                      .filter(
+                        company =>
+                          company.origin_country.length > 0 &&
+                          company.origin_country !== null
+                      )
+                      .map(company =>
+                        company.origin_country === "SU"
+                          ? "RU"
+                          : company.origin_country
+                      )
+                  : res.data.networks.length > 0
+                  ? res.data.networks
+                      .filter(
+                        company =>
+                          company.origin_country.length > 0 &&
+                          company.origin_country !== null
+                      )
+                      .map(company =>
+                        company.origin_country === "SU"
+                          ? "RU"
+                          : company.origin_country
+                      )
                   : undefined;
 
               const receivedTVData = {
@@ -201,14 +291,23 @@ export default function useAddData(id, type) {
                     : undefined,
 
                 fullOrigin:
-                  tvOrigin !== undefined
+                  tvOrigin !== undefined && tvOrigin.length > 0
                     ? [
                         ...new Set([
-                          ...tvOrigin.map(
-                            origin =>
-                              countries.filter(
-                                country => country.code === origin
-                              )[0].name
+                          ...tvOrigin.map(origin =>
+                            countries
+                              .filter(country => country.code === origin)
+                              .map(country => country.name)
+                              .reduce(
+                                (total, current, currentIndex, arr) =>
+                                  total +
+                                  `${
+                                    currentIndex === arr.length - 1
+                                      ? `${current}`
+                                      : `${current}, `
+                                  }`,
+                                ""
+                              )
                           ),
                         ]),
                       ]
@@ -220,6 +319,53 @@ export default function useAddData(id, type) {
                 status: res.data.status,
               };
               startTransition(() => setData(receivedTVData));
+              break;
+
+            case "person":
+              const birthday =
+                res.data.birthday !== null
+                  ? convertDate(new Date(res.data.birthday))
+                  : undefined;
+
+              const deathday =
+                res.data.deathday !== null
+                  ? convertDate(new Date(res.data.deathday))
+                  : undefined;
+
+              const job_title =
+                res.data.known_for_department !== null
+                  ? res.data.known_for_department === "Writing"
+                    ? "Writer"
+                    : res.data.known_for_department === "Directing"
+                    ? "Director"
+                    : res.data.known_for_department === "Acting"
+                    ? res.data.gender === 1
+                      ? "Actress"
+                      : "Actor"
+                    : res.data.known_for_department === "Production"
+                    ? "Producer"
+                    : res.known_for_department
+                  : undefined;
+
+              const receivedPersonData = {
+                birth: birthday,
+                death: deathday,
+                birthplace:
+                  res.data.place_of_birth !== null
+                    ? res.data.place_of_birth.length > 0
+                      ? res.data.place_of_birth
+                      : undefined
+                    : undefined,
+                biography:
+                  res.data.biography !== null
+                    ? res.data.biography.length > 0
+                      ? res.data.biography
+                      : undefined
+                    : undefined,
+                known_workplace: job_title,
+              };
+
+              setData({});
               break;
             default:
               break;

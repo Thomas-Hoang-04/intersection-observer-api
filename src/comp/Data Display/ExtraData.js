@@ -1,7 +1,14 @@
 import { memo, useDeferredValue } from "react";
 import { v4 as uuidv4 } from "uuid";
 import useAddData from "../API & Data/useAddData";
-import { Flex, Text, Divider, Badge, useColorMode } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Divider,
+  Badge,
+  useColorMode,
+  Box,
+} from "@chakra-ui/react";
 
 export const ExtraTVData = memo(({ id }) => {
   const { colorMode } = useColorMode();
@@ -11,7 +18,12 @@ export const ExtraTVData = memo(({ id }) => {
 
   // Due to React bug about Object & Array distinction
   const origins =
-    data.fullOrigin !== undefined ? Object.values(data.fullOrigin) : undefined;
+    data.fullOrigin !== undefined
+      ? Object.values(data.fullOrigin).filter(
+          (origin, index, arr) => arr.length > 0 && origin.length > 0
+        )
+      : undefined;
+
   const genres =
     typeof data.genres === "object" && data.genres.length > 0
       ? Object.values(data.genres)
@@ -21,7 +33,7 @@ export const ExtraTVData = memo(({ id }) => {
     <>
       {data.directors !== undefined && (
         <Flex fontSize={"xl"} gap="0.15rem">
-          <Text fontWeight={500} fontStyle={"italic"}>
+          <Box fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -29,12 +41,12 @@ export const ExtraTVData = memo(({ id }) => {
               Directors:
             </Text>{" "}
             {data.directors}
-          </Text>
+          </Box>
         </Flex>
       )}
       {data.casts !== undefined && (
         <Flex fontSize={"xl"} gap="0.15rem" mb=".25rem" wrap={"wrap"}>
-          <Text fontWeight={500} fontStyle={"italic"}>
+          <Box fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -42,7 +54,7 @@ export const ExtraTVData = memo(({ id }) => {
               Casts:
             </Text>{" "}
             {data.casts}
-          </Text>
+          </Box>
         </Flex>
       )}
       <Flex
@@ -54,7 +66,7 @@ export const ExtraTVData = memo(({ id }) => {
           <>
             {data.seasons !== undefined && (
               <>
-                <Text fontWeight={500} fontStyle={"italic"}>
+                <Box fontWeight={500} fontStyle={"italic"}>
                   <Text
                     fontWeight={700}
                     display={"inline-block"}
@@ -65,7 +77,7 @@ export const ExtraTVData = memo(({ id }) => {
                     ? data.episodes.season <= data.seasons &&
                       `Season ${data.episodes.season}`
                     : `Season ${data.seasons}`}
-                </Text>
+                </Box>
               </>
             )}
             {data.episodes !== undefined && (
@@ -82,7 +94,7 @@ export const ExtraTVData = memo(({ id }) => {
                     mr=".5rem"
                   />
                 </Flex>
-                <Text fontWeight={500} fontStyle={"italic"}>
+                <Box fontWeight={500} fontStyle={"italic"}>
                   <Text
                     fontWeight={700}
                     display={"inline-block"}
@@ -90,7 +102,7 @@ export const ExtraTVData = memo(({ id }) => {
                     Last Episodes:
                   </Text>{" "}
                   Episode {data.episodes.episode}
-                </Text>
+                </Box>
                 <Badge
                   fontSize={"md"}
                   variant={"solid"}
@@ -234,11 +246,11 @@ export const ExtraMovieData = memo(({ id }) => {
       : undefined;
 
   // Due to React bug about Object & Array distinction
-  const origin =
-    typeof data.fullOrigin === "string"
-      ? data.fullOrigin
-      : typeof data.fullOrigin === "object"
-      ? Object.values(data.fullOrigin)
+  const origins =
+    data.fullOrigin !== undefined
+      ? Object.values(data.fullOrigin).filter(
+          (origin, index, arr) => arr.length > 0 && origin.length > 0
+        )
       : undefined;
 
   const genres =
@@ -248,9 +260,22 @@ export const ExtraMovieData = memo(({ id }) => {
 
   return (
     <>
+      {data.studios !== undefined && (
+        <Flex fontSize={"xl"} gap="0.15rem" wrap={"wrap"}>
+          <Box fontWeight={500} fontStyle={"italic"}>
+            <Text
+              fontWeight={700}
+              display={"inline-block"}
+              fontStyle={"initial" || "-moz-initial"}>
+              Created by:
+            </Text>{" "}
+            {data.studios}
+          </Box>
+        </Flex>
+      )}
       {directors !== undefined && (
         <Flex fontSize={"xl"} gap="0.15rem">
-          <Text fontWeight={500} fontStyle={"italic"}>
+          <Box fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -258,12 +283,12 @@ export const ExtraMovieData = memo(({ id }) => {
               Directors:
             </Text>{" "}
             {data.directors}
-          </Text>
+          </Box>
         </Flex>
       )}
       {data.casts !== undefined && (
-        <Flex fontSize={"xl"} gap="0.15rem" mb=".25rem" wrap={"wrap"}>
-          <Text fontWeight={500} fontStyle={"italic"}>
+        <Flex fontSize={"xl"} gap="0.15rem" wrap={"wrap"}>
+          <Box fontWeight={500} fontStyle={"italic"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -271,7 +296,20 @@ export const ExtraMovieData = memo(({ id }) => {
               Casts:
             </Text>{" "}
             {data.casts}
-          </Text>
+          </Box>
+        </Flex>
+      )}
+      {data.runtime !== undefined && (
+        <Flex fontSize={"xl"} gap="0.15rem" wrap={"wrap"}>
+          <Box fontWeight={500} fontStyle={"italic"}>
+            <Text
+              fontWeight={700}
+              display={"inline-block"}
+              fontStyle={"initial" || "-moz-initial"}>
+              Duration:
+            </Text>{" "}
+            {data.runtime}
+          </Box>
         </Flex>
       )}
       <Flex mt=".4rem" gap="1rem" wrap="wrap">
@@ -317,21 +355,8 @@ export const ExtraMovieData = memo(({ id }) => {
             Planned
           </Badge>
         )}
-        {typeof origin === "string" && (
-          <Badge
-            fontSize={"lg"}
-            bgColor={"#00AAB9"}
-            color={colorMode === "dark" ? "whiteAlpha.900" : null}
-            variant={"solid"}
-            borderRadius={"100vw"}
-            px=".75rem"
-            py=".3rem">
-            {origin}
-          </Badge>
-        )}
-        {typeof origin !== "string" &&
-          origin !== undefined &&
-          Object.values(origin).map(origin => {
+        {origins !== undefined &&
+          origins.map(origin => {
             return (
               <Badge
                 key={uuidv4()}

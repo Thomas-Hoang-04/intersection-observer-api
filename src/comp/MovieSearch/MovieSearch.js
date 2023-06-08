@@ -54,15 +54,27 @@ import "./MovieSearch.css";
 import useResult from "../API & Data/useResult";
 
 const TVSeriesData = lazy(() =>
-  import("../Data Display/DataComponent").then(module => ({
-    default: module.TVSeriesData,
-  }))
+  import("../Data Display/DataComponent")
+    .then(module => ({
+      default: module.TVSeriesData,
+    }))
+    .catch(err => console.log(err))
 );
 
 const MotionPicsData = lazy(() =>
-  import("../Data Display/DataComponent").then(module => ({
-    default: module.MotionPicsData,
-  }))
+  import("../Data Display/DataComponent")
+    .then(module => ({
+      default: module.MotionPicsData,
+    }))
+    .catch(err => console.log(err))
+);
+
+const PersonData = lazy(() =>
+  import("../Data Display/DataComponent")
+    .then(module => ({
+      default: module.PersonData,
+    }))
+    .catch(err => console.log(err))
 );
 
 const MovieSearch = memo(() => {
@@ -122,6 +134,7 @@ const MovieSearch = memo(() => {
         entries => {
           if (entries[0].isIntersecting && hasMore) {
             startTransition(() => setPage(page => page + 1));
+            // console.log(page);
           }
         },
         {
@@ -465,8 +478,44 @@ const MovieSearch = memo(() => {
           );
         })}
       {queryType === "person" &&
-        data.map(data => {
-          return null;
+        data.map((dataPoint, index) => {
+          return (
+            <Fragment key={uuidv4()}>
+              <Suspense fallback={<Skeleton></Skeleton>}>
+                <PersonData
+                  id={dataPoint.id}
+                  name={dataPoint.name}
+                  gender={dataPoint.gender}
+                  picture={dataPoint.picture}
+                  works={dataPoint.works}
+                  ref={index === data.length - 1 ? handleLastIntersect : null}
+                />
+              </Suspense>
+              {(index + 1) % 20 === 0 && index + 1 !== data.length && (
+                <Flex
+                  align={"center"}
+                  width={
+                    "max-content" || "-webkit-max-content" || "-moz-max-content"
+                  }
+                  gap="1rem"
+                  py={`.75rem`}>
+                  <Divider
+                    borderColor={`teal.600`}
+                    w={`32rem`}
+                    borderWidth={`2px`}
+                  />{" "}
+                  <Text fontStyle={"italic"} fontSize={"2xl"} fontWeight={700}>
+                    Page {(index + 1) / 20 + 1}
+                  </Text>
+                  <Divider
+                    borderColor={`teal.600`}
+                    w={`32rem`}
+                    borderWidth={`2px`}
+                  />
+                </Flex>
+              )}
+            </Fragment>
+          );
         })}
       {loading && <div className="custom-loader"></div>}
       {!loading && <Box height={`40px`}></Box>}

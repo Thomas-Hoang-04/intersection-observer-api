@@ -14,8 +14,6 @@ import {
 import MovieSearch from "./comp/MovieSearch/MovieSearch";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 
-import useAddData from "./comp/API & Data/useAddData";
-
 export default function App() {
   const { colorMode, toggleColorMode } = useColorMode();
 
