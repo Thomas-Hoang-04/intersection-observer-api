@@ -109,7 +109,8 @@ export default function useAddData(id, type) {
                         .filter(
                           (studio, index) =>
                             studio.name.length > 0 &&
-                            (studio.name !== null) & (index < 6)
+                            studio.name !== null &&
+                            index < 6
                         )
                         .map(studio => studio.name)
                         .reduce(
