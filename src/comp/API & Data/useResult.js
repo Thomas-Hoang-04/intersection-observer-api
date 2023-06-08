@@ -93,7 +93,9 @@ export default function useResult(type, query, page, year = undefined) {
                                     ? known_works.first_air_date.slice(0, 4)
                                     : undefined;
                                 return `${title}${
-                                  year !== undefined ? ` (${year})` : ""
+                                  year !== undefined && year.length > 0
+                                    ? ` (${year})`
+                                    : ""
                                 }`;
                               })
                               .join(", ")

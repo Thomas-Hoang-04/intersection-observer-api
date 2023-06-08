@@ -342,7 +342,7 @@ const MovieSearch = memo(() => {
               TV Series
             </Radio>
             <Radio _focusVisible={{ outline: "none" }} value="person">
-              Actor/Actress
+              People
             </Radio>
           </Stack>
         </RadioGroup>
