@@ -96,16 +96,7 @@ export default function useResult(type, query, page, year = undefined) {
                                   year !== undefined ? ` (${year})` : ""
                                 }`;
                               })
-                              .reduce(
-                                (total, current, currentIndex, arr) =>
-                                  total +
-                                  `${
-                                    currentIndex === arr.length - 1
-                                      ? `${current}`
-                                      : `${current}, `
-                                  }`,
-                                ""
-                              )
+                              .join(", ")
                           : undefined,
                     };
                   default:

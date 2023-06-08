@@ -113,16 +113,7 @@ export default function useAddData(id, type) {
                             index < 6
                         )
                         .map(studio => studio.name)
-                        .reduce(
-                          (total, current, currentIndex, arr) =>
-                            total +
-                            `${
-                              currentIndex === arr.length - 1
-                                ? `${current}`
-                                : `${current}, `
-                            }`,
-                          ""
-                        )
+                        .join(", ")
                     : undefined,
 
                 directors:
@@ -130,16 +121,7 @@ export default function useAddData(id, type) {
                     ? res_cast.data.crew
                         .filter(crew => crew.job === "Director")
                         .map(crew => crew.name)
-                        .reduce(
-                          (total, current, currentIndex, arr) =>
-                            total +
-                            `${
-                              currentIndex === arr.length - 1
-                                ? `${current}`
-                                : `${current}, `
-                            }`,
-                          ""
-                        )
+                        .join(", ")
                     : undefined,
 
                 casts:
@@ -147,16 +129,7 @@ export default function useAddData(id, type) {
                     ? res_cast.data.cast
                         .filter(cast => cast.order < 6)
                         .map(cast => cast.name)
-                        .reduce(
-                          (total, current, currentIndex, arr) =>
-                            total +
-                            `${
-                              currentIndex === arr.length - 1
-                                ? `${current}`
-                                : `${current}, `
-                            }`,
-                          ""
-                        )
+                        .join(", ")
                     : undefined,
 
                 runtime:
@@ -180,16 +153,7 @@ export default function useAddData(id, type) {
                         countries
                           .filter(country => country.code === origin)
                           .map(country => country.name)
-                          .reduce(
-                            (total, current, currentIndex, arr) =>
-                              total +
-                              `${
-                                currentIndex === arr.length - 1
-                                  ? `${current}`
-                                  : `${current}, `
-                              }`,
-                            ""
-                          )
+                          .join(", ")
                       )
                     : undefined,
 
@@ -234,18 +198,7 @@ export default function useAddData(id, type) {
               const receivedTVData = {
                 directors:
                   res.data.created_by.length !== 0
-                    ? res.data.created_by
-                        .map(p => p.name)
-                        .reduce(
-                          (total, current, currentIndex, arr) =>
-                            total +
-                            `${
-                              currentIndex === arr.length - 1
-                                ? `${current}`
-                                : `${current}, `
-                            }`,
-                          ""
-                        )
+                    ? res.data.created_by.map(p => p.name).join(", ")
                     : undefined,
 
                 casts:
@@ -253,16 +206,7 @@ export default function useAddData(id, type) {
                     ? res_cast.data.cast
                         .filter(cast => cast.order < 6)
                         .map(cast => cast.name)
-                        .reduce(
-                          (total, current, currentIndex, arr) =>
-                            total +
-                            `${
-                              currentIndex === arr.length - 1
-                                ? `${current}`
-                                : `${current}, `
-                            }`,
-                          ""
-                        )
+                        .join(", ")
                     : undefined,
 
                 genres: res.data.genres.map(g => g.name),
@@ -299,16 +243,7 @@ export default function useAddData(id, type) {
                             countries
                               .filter(country => country.code === origin)
                               .map(country => country.name)
-                              .reduce(
-                                (total, current, currentIndex, arr) =>
-                                  total +
-                                  `${
-                                    currentIndex === arr.length - 1
-                                      ? `${current}`
-                                      : `${current}, `
-                                  }`,
-                                ""
-                              )
+                              .join(", ")
                           ),
                         ]),
                       ]

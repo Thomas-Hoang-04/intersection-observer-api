@@ -114,39 +114,38 @@ export const ExtraTVData = memo(({ id }) => {
                   ml=".75rem">
                   Season {data.episodes.season}
                 </Badge>
-                {data.status === "Ended" && (
-                  <Badge
-                    fontSize={"md"}
-                    variant={"solid"}
-                    bgColor={"pink.400"}
-                    color={colorMode === "dark" ? "whiteAlpha.800" : null}
-                    borderRadius={"100vw"}
-                    px=".75rem"
-                    py=".3rem"
-                    ml=".75rem">
-                    Ended
-                  </Badge>
-                )}
-                {(data.status === "Canceled" ||
-                  data.status === "Cancelled") && (
-                  <Badge
-                    fontSize={"md"}
-                    variant={"solid"}
-                    bgColor={"red.500"}
-                    color={colorMode === "dark" ? "whiteAlpha.900" : null}
-                    borderRadius={"100vw"}
-                    px=".75rem"
-                    py=".3rem"
-                    ml=".75rem">
-                    Canceled
-                  </Badge>
-                )}
               </>
             )}
           </>
         )}
       </Flex>
       <Flex mt=".4rem" gap="1rem" wrap="wrap">
+        {data.status === "Ended" && (
+          <Badge
+            fontSize={"lg"}
+            variant={"solid"}
+            fontStyle={"italic"}
+            bgColor={"pink.400"}
+            color={colorMode === "dark" ? "whiteAlpha.900" : null}
+            borderRadius={"100vw"}
+            px=".75rem"
+            py=".3rem">
+            Ended
+          </Badge>
+        )}
+        {(data.status === "Canceled" || data.status === "Cancelled") && (
+          <Badge
+            fontSize={"lg"}
+            variant={"solid"}
+            fontStyle={"italic"}
+            bgColor={"red.500"}
+            color={colorMode === "dark" ? "whiteAlpha.900" : null}
+            borderRadius={"100vw"}
+            px=".75rem"
+            py=".3rem">
+            Canceled
+          </Badge>
+        )}
         {data.episodes !== undefined &&
           data.seasons !== undefined &&
           data.status !== "Ended" &&
