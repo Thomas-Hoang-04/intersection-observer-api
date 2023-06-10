@@ -33,7 +33,7 @@ const getDateSuffix = date => {
 const convertDate = date => {
   return `${monthList[date.getMonth()]} ${date.getDate()}${getDateSuffix(
     date.getDate()
-  )}, ${date.getFullYear()}}`;
+  )}, ${date.getFullYear()}`;
 };
 
 export default function useAddData(id, type) {
@@ -258,34 +258,15 @@ export default function useAddData(id, type) {
               break;
 
             case "person":
-              const birthday =
-                res.data.birthday !== null
-                  ? convertDate(new Date(res.data.birthday))
-                  : undefined;
-
-              const deathday =
-                res.data.deathday !== null
-                  ? convertDate(new Date(res.data.deathday))
-                  : undefined;
-
-              const job_title =
-                res.data.known_for_department !== null
-                  ? res.data.known_for_department === "Writing"
-                    ? "Writer"
-                    : res.data.known_for_department === "Directing"
-                    ? "Director"
-                    : res.data.known_for_department === "Acting"
-                    ? res.data.gender === 1
-                      ? "Actress"
-                      : "Actor"
-                    : res.data.known_for_department === "Production"
-                    ? "Producer"
-                    : res.known_for_department
-                  : undefined;
-
               const receivedPersonData = {
-                birth: birthday,
-                death: deathday,
+                birth:
+                  res.data.birthday !== null
+                    ? convertDate(new Date(res.data.birthday))
+                    : undefined,
+                death:
+                  res.data.deathday !== null
+                    ? convertDate(new Date(res.data.deathday))
+                    : undefined,
                 birthplace:
                   res.data.place_of_birth !== null
                     ? res.data.place_of_birth.length > 0
@@ -298,10 +279,11 @@ export default function useAddData(id, type) {
                       ? res.data.biography
                       : undefined
                     : undefined,
-                known_workplace: job_title,
+                imdb_id:
+                  res.data.imdb_id !== null ? res.data.imdb_id : undefined,
               };
 
-              setData({});
+              startTransition(() => setData(receivedPersonData));
               break;
             default:
               break;

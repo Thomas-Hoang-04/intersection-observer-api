@@ -178,7 +178,7 @@ const MovieSearch = memo(() => {
           ? "Movies"
           : radioRef.current === "tv"
           ? "TV Series"
-          : "Actor/Actress"
+          : "People"
       );
     }
   }, [setFormError, setYear, year.selected]);

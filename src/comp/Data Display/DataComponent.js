@@ -7,6 +7,8 @@ import {
   lazy,
   Suspense,
   useDeferredValue,
+  useEffect,
+  startTransition,
 } from "react";
 import {
   Box,
@@ -20,6 +22,8 @@ import {
   Skeleton,
   Text,
   useColorMode,
+  Divider,
+  Badge,
 } from "@chakra-ui/react";
 
 import default_poster from "../../assets/images/default_poster.jpg";
@@ -30,6 +34,7 @@ import default_female_profile from "../../assets/images/default_female_profile.p
 import useAddData from "../API & Data/useAddData";
 
 import { SmallAddIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import axios from "axios";
 
 // Lazy loading
 const ExtraTVData = lazy(() =>
@@ -58,7 +63,7 @@ export const TVSeriesData = memo(
     }, []);
 
     // Control text overflow
-    const [isExpand, setIsExpand] = useState(false);
+    const [expand, isExpand] = useState(false);
 
     return (
       <Grid
@@ -102,7 +107,7 @@ export const TVSeriesData = memo(
             startingHeight={
               overviewHeight > 16 * 8.2 ? `8.2rem` : `${overviewHeight + 20}px`
             }
-            in={isExpand}
+            in={expand}
             animateOpacity>
             <Text
               mt=".75rem"
@@ -115,7 +120,7 @@ export const TVSeriesData = memo(
           {overviewHeight > 16 * 8.2 && (
             <Button
               leftIcon={
-                isExpand ? (
+                expand ? (
                   <SmallCloseIcon boxSize={7} />
                 ) : (
                   <SmallAddIcon boxSize={7} />
@@ -123,10 +128,10 @@ export const TVSeriesData = memo(
               }
               variant={`outline`}
               colorScheme="orange"
-              my="1.25rem"
+              my=".75rem"
               fontSize={"lg"}
-              onClick={() => setIsExpand(!isExpand)}>
-              {!isExpand ? "Expand" : "Collapse"}
+              onClick={() => isExpand(!expand)}>
+              {!expand ? "Expand" : "Collapse"}
             </Button>
           )}
         </GridItem>
@@ -149,7 +154,7 @@ export const MotionPicsData = memo(
     }, []);
 
     // Control text overflow
-    const [isExpand, setIsExpand] = useState(false);
+    const [expand, isExpand] = useState(false);
 
     return (
       <Grid
@@ -193,7 +198,7 @@ export const MotionPicsData = memo(
             startingHeight={
               overviewHeight > 16 * 8.2 ? `8.2rem` : `${overviewHeight + 20}px`
             }
-            in={isExpand}
+            in={expand}
             animateOpacity>
             <Text
               mt=".75rem"
@@ -206,7 +211,7 @@ export const MotionPicsData = memo(
           {overviewHeight > 16 * 8.2 && (
             <Button
               leftIcon={
-                isExpand ? (
+                expand ? (
                   <SmallCloseIcon boxSize={7} />
                 ) : (
                   <SmallAddIcon boxSize={7} />
@@ -214,10 +219,10 @@ export const MotionPicsData = memo(
               }
               variant={`outline`}
               colorScheme="orange"
-              my="1.25rem"
+              my=".75rem"
               fontSize={"lg"}
-              onClick={() => setIsExpand(!isExpand)}>
-              {!isExpand ? "Expand" : "Collapse"}
+              onClick={() => isExpand(!expand)}>
+              {!expand ? "Expand" : "Collapse"}
             </Button>
           )}
         </GridItem>
@@ -233,6 +238,53 @@ export const PersonData = memo(
 
     // Additional data fetching
     const data = useDeferredValue(useAddData(id, "person"));
+
+    const [profession, setProfession] = useState([]);
+    const prof = useDeferredValue(profession);
+
+    // Manage data overflow
+    const [expand, isExpand] = useState(false);
+
+    const overviewRef = useRef(null);
+    const [overviewHeight, setOverviewHeight] = useState(0);
+
+    useLayoutEffect(() => {
+      if (data.biography !== undefined) {
+        setOverviewHeight(overviewRef.current.scrollHeight);
+      }
+    }, [data.biography]);
+
+    useEffect(() => {
+      if (data.imdb_id !== undefined) {
+        axios({
+          method: "GET",
+          url: `https://moviesdatabase.p.rapidapi.com/actors/${data.imdb_id}`,
+          headers: {
+            "X-RapidAPI-Key":
+              "c4f416fc44msh986f22e972fb6d6p1a0aa6jsn882b516ab40c",
+            "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com",
+          },
+        })
+          .then(res => {
+            const profession = res.data.results.primaryProfession
+              .split(",")
+              .map(profession =>
+                profession.includes("_")
+                  ? profession
+                      .split("_")
+                      .map(
+                        form_prf =>
+                          form_prf.charAt(0).toUpperCase() + form_prf.slice(1)
+                      )
+                      .join(" ")
+                  : profession.charAt(0).toUpperCase() + profession.slice(1)
+              );
+
+            startTransition(() => setProfession(profession));
+          })
+          .catch(err => console.log(err));
+      }
+    }, [data.imdb_id]);
 
     return (
       <Grid
@@ -265,12 +317,27 @@ export const PersonData = memo(
           />
         </GridItem>
         <GridItem>
-          <Heading fontSize={"4.25xl"}>{name}</Heading>
+          <Flex align={"center"} gap={"1rem"}>
+            <Heading fontSize={"4.25xl"}>{name}</Heading>
+            {data.death !== undefined && (
+              <Badge
+                fontSize={"lg"}
+                variant={"solid"}
+                fontStyle={"italic"}
+                bgColor={"orange.600"}
+                color={colorMode === "dark" ? "whiteAlpha.900" : null}
+                borderRadius={"100vw"}
+                px=".75rem"
+                py=".25rem">
+                Deceased
+              </Badge>
+            )}
+          </Flex>
           <Box
             mt=".5rem"
             fontWeight={500}
             fontStyle={"italic"}
-            fontSize={"1.45rem"}>
+            fontSize={"1.4rem"}>
             <Text
               fontWeight={700}
               display={"inline-block"}
@@ -279,8 +346,68 @@ export const PersonData = memo(
             </Text>{" "}
             {gender}
           </Box>
+          {data.birthplace !== undefined && (
+            <Box
+              mt=".5rem"
+              fontWeight={500}
+              fontStyle={"italic"}
+              fontSize={"1.35rem"}>
+              <Text
+                fontWeight={700}
+                display={"inline-block"}
+                fontStyle={"initial" || "-moz-initial"}>
+                Birthplace:
+              </Text>{" "}
+              {data.birthplace}
+            </Box>
+          )}
+          <Flex gap=".75rem" align={"center"}>
+            {data.birth !== undefined && (
+              <Box
+                mt=".5rem"
+                fontWeight={500}
+                fontStyle={"italic"}
+                fontSize={"1.35rem"}>
+                <Text
+                  fontWeight={700}
+                  display={"inline-block"}
+                  fontStyle={"initial" || "-moz-initial"}>
+                  Date of Birth:
+                </Text>{" "}
+                {data.birth}
+              </Box>
+            )}
+            {data.death !== undefined && (
+              <>
+                <Flex h="1.75rem" gap=".4rem">
+                  <Divider
+                    orientation="vertical"
+                    border={"1.75px solid cyan"}
+                    ml=".25rem"
+                  />
+                  <Divider
+                    orientation="vertical"
+                    border={"1.75px solid cyan"}
+                  />
+                </Flex>
+                <Box
+                  mt=".5rem"
+                  fontWeight={500}
+                  fontStyle={"italic"}
+                  fontSize={"1.35rem"}>
+                  <Text
+                    fontWeight={700}
+                    display={"inline-block"}
+                    fontStyle={"initial" || "-moz-initial"}>
+                    Date of Death:
+                  </Text>{" "}
+                  {data.death}
+                </Box>
+              </>
+            )}
+          </Flex>
           <Box
-            mt={".5rem"}
+            mt={".4rem"}
             fontWeight={500}
             fontStyle={"italic"}
             fontSize={"1.35rem"}>
@@ -292,6 +419,59 @@ export const PersonData = memo(
             </Text>{" "}
             {works}
           </Box>
+          {data.imdb_id !== undefined && (
+            <Flex my=".5rem" gap=".75rem">
+              {prof.map(prof => (
+                <Badge
+                  fontSize={"lg"}
+                  variant={"solid"}
+                  bgColor={"cyan.600"}
+                  color={colorMode === "dark" ? "whiteAlpha.900" : null}
+                  borderRadius={"100vw"}
+                  px=".75rem"
+                  py=".25rem">
+                  {prof}
+                </Badge>
+              ))}
+            </Flex>
+          )}
+          {data.biography !== undefined && (
+            <>
+              <Collapse
+                in={expand}
+                animateOpacity
+                startingHeight={
+                  overviewHeight > 16 * 8.2
+                    ? `8.2rem`
+                    : `${overviewHeight + 20}px`
+                }>
+                <Text
+                  mt=".3rem"
+                  fontSize={`xl`}
+                  fontWeight={600}
+                  ref={overviewRef}>
+                  {data.biography}
+                </Text>
+              </Collapse>
+              {overviewHeight > 16 * 8.2 && (
+                <Button
+                  leftIcon={
+                    expand ? (
+                      <SmallCloseIcon boxSize={7} />
+                    ) : (
+                      <SmallAddIcon boxSize={7} />
+                    )
+                  }
+                  variant={`outline`}
+                  colorScheme="orange"
+                  my=".75rem"
+                  fontSize={"lg"}
+                  onClick={() => isExpand(!expand)}>
+                  {!expand ? "Expand" : "Collapse"}
+                </Button>
+              )}
+            </>
+          )}
         </GridItem>
       </Grid>
     );
