@@ -7,7 +7,6 @@ import {
   lazy,
   Suspense,
   useDeferredValue,
-  useEffect,
   startTransition,
 } from "react";
 import {
@@ -254,7 +253,7 @@ export const PersonData = memo(
       }
     }, [data.biography]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       if (data.imdb_id !== undefined) {
         axios({
           method: "GET",
@@ -420,7 +419,7 @@ export const PersonData = memo(
             {works}
           </Box>
           {data.imdb_id !== undefined && (
-            <Flex my=".5rem" gap=".75rem">
+            <Flex my=".75rem" gap="1rem">
               {prof.map(prof => (
                 <Badge
                   fontSize={"lg"}

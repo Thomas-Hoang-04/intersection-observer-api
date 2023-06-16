@@ -9,6 +9,7 @@ import {
   useDisclosure,
   Flex,
   Text,
+  Heading,
 } from "@chakra-ui/react";
 
 import MovieSearch from "./comp/MovieSearch/MovieSearch";
@@ -34,32 +35,26 @@ export default function App() {
 
   return (
     <>
-      <Flex
-        align={"center"}
-        px="2rem"
-        py="1rem"
-        bgColor={colorMode === "dark" ? `teal.600` : `teal.100`}
-        w={"max-content"}
-        mb="3rem"
-        gap={`1.25rem`}
-        borderRadius={`100vw`}>
-        <Text fontSize={`lg`} fontWeight={600}>
-          Switch to {colorMode === "dark" ? "Light" : "Dark"} Mode
-        </Text>
-        <Tooltip
-          closeOnClick={false}
-          bgColor={colorMode === "dark" ? "teal.200" : "teal.500"}
-          openDelay={100}
-          placement="right"
-          label={`Current: ${colorMode === "dark" ? "Dark" : "Light"} Mode`}
-          fontSize={`xl`}
-          ml={`.5rem`}
-          px="1rem"
-          py=".25rem"
-          borderRadius={"100vw"}
-          aria-label={`Click here to switch to ${
-            colorMode === "dark" ? "light" : "dark"
-          } mode`}>
+      <Flex align={"center"} justify={"space-between"} mb="2rem">
+        <Heading
+          fontFamily={"Blockletter"}
+          letterSpacing={"1.5px"}
+          fontSize={"6xl"}
+          color={colorMode === "dark" ? "gray.300" : "gray.800"}
+          textShadow={"1.5px 1.5px #B2F5EA"}>
+          MovieGenie
+        </Heading>
+        <Flex
+          align={"center"}
+          px="2rem"
+          py="1rem"
+          bgColor={colorMode === "dark" ? `teal.600` : `teal.100`}
+          w={"max-content"}
+          gap={`1.25rem`}
+          borderRadius={`100vw`}>
+          <Text fontSize={"xl"} fontWeight={600}>
+            {colorMode === "dark" ? "Dark" : "Light"} Mode
+          </Text>
           <div className="toggle-switch">
             <label
               className="switch-label"
@@ -75,7 +70,7 @@ export default function App() {
               <span className="slider"></span>
             </label>
           </div>
-        </Tooltip>
+        </Flex>
       </Flex>
       <Fade in={isOpen}>
         <Tooltip

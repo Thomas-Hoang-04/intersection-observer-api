@@ -4,3 +4,10 @@
   font-display: swap;
   src: url("./assets/fonts/HauoraGX.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "Blockletter";
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./assets/fonts/Blockletter.otf") format("opentype");
+}
