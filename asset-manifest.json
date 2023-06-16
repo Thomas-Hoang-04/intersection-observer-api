@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/intersection-observer-api/static/css/main.c4722366.css",
+    "main.js": "/intersection-observer-api/static/js/main.0235a0ec.js",
+    "static/js/813.e1099e2d.chunk.js": "/intersection-observer-api/static/js/813.e1099e2d.chunk.js",
+    "static/js/755.a1e286b7.chunk.js": "/intersection-observer-api/static/js/755.a1e286b7.chunk.js",
+    "static/media/HauoraGX.ttf": "/intersection-observer-api/static/media/HauoraGX.75ce1cd3ffd0985f06df.ttf",
+    "static/media/Blockletter.otf": "/intersection-observer-api/static/media/Blockletter.1148b96b8d22acea8b8c.otf",
+    "static/media/default_poster.jpg": "/intersection-observer-api/static/media/default_poster.926d53e4e9f321aef6cd.jpg",
+    "static/media/default_female_profile.png": "/intersection-observer-api/static/media/default_female_profile.320270756a4231b059c5.png",
+    "static/media/default_male_profile.png": "/intersection-observer-api/static/media/default_male_profile.644916b27824a3c6521c.png",
+    "index.html": "/intersection-observer-api/index.html",
+    "main.c4722366.css.map": "/intersection-observer-api/static/css/main.c4722366.css.map",
+    "main.0235a0ec.js.map": "/intersection-observer-api/static/js/main.0235a0ec.js.map",
+    "813.e1099e2d.chunk.js.map": "/intersection-observer-api/static/js/813.e1099e2d.chunk.js.map",
+    "755.a1e286b7.chunk.js.map": "/intersection-observer-api/static/js/755.a1e286b7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c4722366.css",
+    "static/js/main.0235a0ec.js"
+  ]
+}
