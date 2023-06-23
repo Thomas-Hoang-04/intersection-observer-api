@@ -40,8 +40,10 @@ export default function App() {
           fontFamily={"Blockletter"}
           letterSpacing={"1.5px"}
           fontSize={"6xl"}
-          color={colorMode === "dark" ? "gray.300" : "gray.800"}
-          textShadow={"1.5px 1.5px #B2F5EA"}>
+          color={colorMode === "dark" ? "gray.300" : "teal.700"}
+          textShadow={
+            colorMode === "dark" ? "1.5px 1.5px #B2F5EA" : "1.5px 1.5px #319795"
+          }>
           MovieGenie
         </Heading>
         <Flex
